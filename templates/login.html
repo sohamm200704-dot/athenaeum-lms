@@ -1,0 +1,13 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Athenaeum Login</title><link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"></head>
+<body class="login-bg"><div class="login-card">
+<div class="logo">📚</div><h1>Athenaeum</h1><p>Library Management System</p>
+<form method="post">
+<label>Username</label><input name="username" required placeholder="Enter username">
+<label>Password</label><input type="password" name="password" required placeholder="Enter password">
+<button class="primary full">Sign In</button>
+</form>
+<div class="demo"><b>Demo accounts</b><br>admin / admin123<br>librarian / lib123<br>member / member123</div>
+{% with messages = get_flashed_messages(with_categories=true) %}{% for c,m in messages %}<div class="alert {{c}}">{{m}}</div>{% endfor %}{% endwith %}
+</div></body></html>

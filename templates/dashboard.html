@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% block content %}
+<div class="top"><div><h1>Dashboard</h1><p>Real-time library circulation overview.</p></div></div>
+<div class="cards">
+<div class="card"><span>Books</span><b>{{stats.books}}</b><small>Titles in catalog</small></div>
+<div class="card"><span>Total Copies</span><b>{{stats.copies}}</b><small>Across all titles</small></div>
+<div class="card"><span>Available</span><b>{{stats.available}}</b><small>Copies on shelf</small></div>
+<div class="card"><span>Active Loans</span><b>{{stats.loans}}</b><small>Currently borrowed</small></div>
+<div class="card"><span>Reservations</span><b>{{stats.reservations}}</b><small>Active holds</small></div>
+<div class="card"><span>Unpaid Fines</span><b>₹{{"%.2f"|format(stats.unpaid)}}</b><small>Outstanding amount</small></div>
+</div>
+<div class="grid2">
+<section class="panel"><h2>Quick Actions</h2>
+<div class="actions"><a class="action" href="{{url_for('books')}}">📖 Search Catalog</a>
+{% if current_user.role in ['admin','librarian'] %}<a class="action" href="{{url_for('loans')}}">🔄 Issue / Return</a>{% endif %}
+<a class="action" href="{{url_for('reservations')}}">🔖 Reservations</a><a class="action" href="{{url_for('fines')}}">₹ Fines</a></div></section>
+<section class="panel"><h2>System Status</h2><p class="status">● Database connected</p><p>Automatic due dates: <b>14 days</b></p><p>Overdue fine rate: <b>₹5/day</b></p></section>
+</div>
+{% endblock %}

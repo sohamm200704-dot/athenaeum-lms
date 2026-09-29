@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block content %}
+<div class="top"><div><h1>Borrow & Return</h1><p>Automatic 14-day due dates and overdue fines.</p></div></div>
+{% if current_user.role in ['admin','librarian'] %}<section class="panel"><h2>Issue a Book</h2><form class="inline-form" method="post" action="{{url_for('borrow')}}"><select name="member_id" required><option value="">Select member</option>{% for m in members %}<option value="{{m.id}}">{{m.name}}</option>{% endfor %}</select><select name="book_id" required><option value="">Select available book</option>{% for b in books %}<option value="{{b.id}}">{{b.title}} ({{b.available}} available)</option>{% endfor %}</select><button class="primary">Issue Book</button></form></section>{% endif %}
+<div class="table-wrap"><table><tr><th>Book</th><th>Member</th><th>Borrowed</th><th>Due</th><th>Returned</th><th>Status</th>{% if current_user.role in ['admin','librarian'] %}<th>Action</th>{% endif %}</tr>
+{% for l in loans %}<tr><td>{{l.title}}</td><td>{{l.member_name}}</td><td>{{l.borrow_date}}</td><td>{{l.due_date}}</td><td>{{l.return_date or '-'}}</td><td>{% if l.return_date %}<span class="pill ok">Returned</span>{% elif l.overdue %}<span class="pill bad">Overdue</span>{% else %}<span class="pill warn">On loan</span>{% endif %}</td>
+{% if current_user.role in ['admin','librarian'] %}<td>{% if not l.return_date %}<form method="post" action="{{url_for('return_book',loan_id=l.id)}}"><button class="link">Return</button></form>{% else %}-{% endif %}</td>{% endif %}</tr>{% endfor %}</table></div>
+{% endblock %}

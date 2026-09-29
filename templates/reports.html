@@ -1,0 +1,7 @@
+{% extends "base.html" %}{% block content %}
+<div class="top"><div><h1>Reports</h1><p>Inventory, circulation, overdue and fine summary.</p></div></div>
+<div class="cards">
+<div class="card"><span>Titles</span><b>{{data.books}}</b></div><div class="card"><span>Total Copies</span><b>{{data.copies}}</b></div><div class="card"><span>Borrowed</span><b>{{data.borrowed}}</b></div><div class="card"><span>Available</span><b>{{data.available}}</b></div><div class="card"><span>Overdue</span><b>{{data.overdue}}</b></div><div class="card"><span>Unpaid Fines</span><b>₹{{"%.2f"|format(data.unpaid)}}</b></div>
+</div>
+<section class="panel"><h2>Inventory by Category</h2><table><tr><th>Category</th><th>Total Copies</th><th>Available</th><th>Utilization</th></tr>{% for c in category %}<tr><td>{{c.category}}</td><td>{{c.copies}}</td><td>{{c.available}}</td><td>{{"%.0f"|format((1-(c.available/c.copies))*100) if c.copies else 0}}%</td></tr>{% endfor %}</table></section>
+{% endblock %}

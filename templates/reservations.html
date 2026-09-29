@@ -1,0 +1,8 @@
+{% extends "base.html" %}{% block content %}
+<div class="top"><div><h1>Reservations</h1><p>Place holds on titles and track reservation status.</p></div></div>
+<section class="panel"><h2>Place Reservation</h2><form class="inline-form" method="post" action="{{url_for('add_reservation')}}"><select name="book_id" required><option value="">Select book</option>{% for b in books %}<option value="{{b.id}}">{{b.title}}</option>{% endfor %}</select>
+{% if current_user.role in ['admin','librarian'] %}<select name="member_id" required><option value="">Select member</option>{% for m in members %}<option value="{{m.id}}">{{m.name}}</option>{% endfor %}</select>{% endif %}
+<button class="primary">Place Hold</button></form></section>
+<div class="table-wrap"><table><tr><th>Book</th><th>Member</th><th>Date</th><th>Status</th>{% if current_user.role in ['admin','librarian'] %}<th>Action</th>{% endif %}</tr>
+{% for r in reservations %}<tr><td>{{r.title}}</td><td>{{r.member_name}}</td><td>{{r.reserved_date}}</td><td><span class="pill {{'ok' if r.status in ['Ready','Completed'] else 'warn'}}">{{r.status}}</span></td>{% if current_user.role in ['admin','librarian'] %}<td>{% if r.status != 'Completed' %}<form method="post" action="{{url_for('complete_reservation',rid=r.id)}}"><button class="link">Complete</button></form>{% else %}-{% endif %}</td>{% endif %}</tr>{% endfor %}</table></div>
+{% endblock %}

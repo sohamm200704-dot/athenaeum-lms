@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% block content %}
+<div class="top"><div><h1>Catalog</h1><p>Search and manage the library collection.</p></div>
+{% if current_user.role in ['admin','librarian'] %}<button onclick="document.getElementById('add').showModal()" class="primary">+ Add Book</button>{% endif %}</div>
+<form class="search"><input name="q" value="{{q}}" placeholder="Search by title, author, category or ISBN"><button class="primary">Search</button>{% if q %}<a href="{{url_for('books')}}">Clear</a>{% endif %}</form>
+<div class="table-wrap"><table><tr><th>Title</th><th>Author</th><th>Category</th><th>ISBN</th><th>Copies</th><th>Availability</th>{% if current_user.role in ['admin','librarian'] %}<th>Action</th>{% endif %}</tr>
+{% for b in books %}<tr><td><b>{{b.title}}</b></td><td>{{b.author}}</td><td><span class="tag">{{b.category}}</span></td><td>{{b.isbn or '-'}}</td><td>{{b.copies}}</td><td><span class="pill {{'ok' if b.available else 'bad'}}">{{b.available}} available</span></td>
+{% if current_user.role in ['admin','librarian'] %}<td><button class="link" onclick='editBook({{b|tojson}})'>Edit</button></td>{% endif %}</tr>{% else %}<tr><td colspan="7">No books found.</td></tr>{% endfor %}</table></div>
+<dialog id="add"><form method="post" action="{{url_for('add_book')}}" class="dialog"><h2>Add Book</h2><input name="title" placeholder="Title" required><input name="author" placeholder="Author" required><input name="category" placeholder="Category" required><input name="isbn" placeholder="ISBN"><input name="copies" type="number" min="1" value="1" required><button class="primary">Add</button><button type="button" onclick="this.closest('dialog').close()">Cancel</button></form></dialog>
+<dialog id="edit"><form method="post" id="editForm" class="dialog"><h2>Edit Book</h2><input id="etitle" name="title" required><input id="eauthor" name="author" required><input id="ecategory" name="category" required><input id="eisbn" name="isbn"><input id="ecopies" name="copies" type="number" min="1" required><button class="primary">Save</button><button type="button" onclick="this.closest('dialog').close()">Cancel</button></form></dialog>
+<script>
+function editBook(b){document.getElementById('editForm').action='/books/'+b.id+'/edit'; etitle.value=b.title;eauthor.value=b.author;ecategory.value=b.category;eisbn.value=b.isbn||'';ecopies.value=b.copies;edit.showModal();}
+</script>
+{% endblock %}

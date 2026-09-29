@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block content %}
+<div class="top"><div><h1>Members</h1><p>Manage library member accounts.</p></div></div>
+<section class="panel"><h2>Add Member</h2><form class="inline-form" method="post" action="{{url_for('add_member')}}"><input name="name" placeholder="Full name" required><input name="username" placeholder="Username" required><input name="password" placeholder="Password" required><button class="primary">Create Member</button></form></section>
+<div class="table-wrap"><table><tr><th>Name</th><th>Username</th><th>Role</th></tr>{% for m in members %}<tr><td>{{m.name}}</td><td>{{m.username}}</td><td><span class="tag">{{m.role}}</span></td></tr>{% endfor %}</table></div>
+{% endblock %}

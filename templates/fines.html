@@ -1,0 +1,5 @@
+{% extends "base.html" %}{% block content %}
+<div class="top"><div><h1>Fine Management</h1><p>Overdue fines are calculated automatically at ₹5 per day.</p></div></div>
+<div class="table-wrap"><table><tr><th>Member</th><th>Book</th><th>Amount</th><th>Reason</th><th>Status</th>{% if current_user.role in ['admin','librarian'] %}<th>Action</th>{% endif %}</tr>
+{% for f in fines %}<tr><td>{{f.member_name}}</td><td>{{f.title}}</td><td><b>₹{{"%.2f"|format(f.amount)}}</b></td><td>{{f.reason}}</td><td><span class="pill {{'ok' if f.paid else 'bad'}}">{{'Paid' if f.paid else 'Unpaid'}}</span></td>{% if current_user.role in ['admin','librarian'] %}<td>{% if not f.paid %}<form method="post" action="{{url_for('pay_fine',fine_id=f.id)}}"><button class="link">Mark Paid</button></form>{% else %}-{% endif %}</td>{% endif %}</tr>{% else %}<tr><td colspan="6">No fines recorded.</td></tr>{% endfor %}</table></div>
+{% endblock %}

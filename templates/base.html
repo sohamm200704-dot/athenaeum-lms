@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Athenaeum LMS</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="layout">
+<aside class="sidebar">
+  <div class="brand">📚 <span>Athenaeum</span><small>Library Management System</small></div>
+  {% if current_user.user_id %}
+  <nav>
+    <a href="{{ url_for('dashboard') }}">⌂ Dashboard</a>
+    <a href="{{ url_for('books') }}">📖 Catalog</a>
+    <a href="{{ url_for('loans') }}">🔄 Borrow & Return</a>
+    <a href="{{ url_for('reservations') }}">🔖 Reservations</a>
+    <a href="{{ url_for('fines') }}">₹ Fine Management</a>
+    {% if current_user.role in ['admin','librarian'] %}
+    <a href="{{ url_for('members') }}">👥 Members</a>
+    <a href="{{ url_for('reports') }}">📊 Reports</a>
+    {% endif %}
+  </nav>
+  <div class="profile">
+    <strong>{{ current_user.name }}</strong><span>{{ current_user.role|capitalize }}</span>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </div>
+  {% endif %}
+</aside>
+<main class="main">
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% for category,message in messages %}<div class="alert {{ category }}">{{ message }}</div>{% endfor %}
+{% endwith %}
+{% block content %}{% endblock %}
+</main>
+</div>
+</body>
+</html>
